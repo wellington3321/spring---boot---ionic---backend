@@ -1,6 +1,5 @@
 package com.ligia.cursomc;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +9,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.ligia.cursomc.domain.Categoria;
 import com.ligia.cursomc.domain.Cidade;
+import com.ligia.cursomc.domain.Cliente;
+import com.ligia.cursomc.domain.Endereco;
 import com.ligia.cursomc.domain.Estado;
 import com.ligia.cursomc.domain.Produto;
+import com.ligia.cursomc.domain.enums.TipoCliente;
 import com.ligia.cursomc.repositories.CategoriaRepository;
 import com.ligia.cursomc.repositories.CidadeRepository;
+import com.ligia.cursomc.repositories.ClienteRepository;
+import com.ligia.cursomc.repositories.EnderecoRepository;
 import com.ligia.cursomc.repositories.EstadoRepository;
 import com.ligia.cursomc.repositories.ProdutoRepository;
 
@@ -31,6 +35,12 @@ public class CursomcApplication implements CommandLineRunner {
 	
 	@Autowired
 	private EstadoRepository estadorepository;
+	
+	@Autowired
+	private ClienteRepository clienterepository;
+	
+	@Autowired
+	private EnderecoRepository enderecorepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(CursomcApplication.class, args);
@@ -68,6 +78,20 @@ public class CursomcApplication implements CommandLineRunner {
 		
 		estadorepository.saveAll(Arrays.asList(est1, est2));
 		cidaderepository.saveAll(Arrays.asList(c1, c2, c3));
+		
+		Cliente cli1 = new Cliente(null, "Maria Silva", "Maria@gmail.com", "36378912377", TipoCliente.PESSOAFISICA);
+		
+		cli1.getTelefones().addAll(Arrays.asList("27363323", "93838393"));
+		
+		Endereco e1 = new Endereco(null, "Rua Flores", "300", "Apto 203", "Jardim", "38220834", cli1, c1);
+		Endereco e2 = new Endereco(null, "Avenida Matos", "105", "Sala 800", "Centro", "38777012", cli1, c2);
+		
+		cli1.getEnderecos().addAll(Arrays.asList(e1, e2));
+		
+		clienterepository.saveAll(Arrays.asList(cli1));
+		enderecorepository.saveAll(Arrays.asList(e1, e2));
+	   
+
 	}
 
 }
